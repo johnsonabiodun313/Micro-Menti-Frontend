@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Micro-Menti · Participant View</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">Micro-Menti</div>
+    <nav class="tabs">
+      <span class="tab active">Participant View</span>
+    </nav>
+    <div class="join-code">JOIN: <span id="joinCode">5591</span></div>
+  </header>
+
+  <main class="stage">
+    <div class="poll-status">
+      <span class="status-dot"></span>
+      <span class="status-label">LIVE POLL ACTIVE</span>
+    </div>
+
+    <h1 class="question">Describe microservices in one word</h1>
+
+    <div class="answer-card">
+      <textarea
+        id="wordInput"
+        class="word-input"
+        maxlength="25"
+        placeholder="Enter word..."
+        rows="1"
+      ></textarea>
+      <div class="char-count"><span id="charCount">0</span>/25</div>
+    </div>
+
+    <button id="submitBtn" class="submit-btn">Submit</button>
+  </main>
+
+  <footer class="statusbar">
+    <div class="latency">
+      <svg class="pulse-icon" viewBox="0 0 24 24" width="14" height="14">
+        <path d="M2 12h4l2 8 4-16 2 8h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Latency: <span id="latency">14ms</span>
+    </div>
+    <div class="divider"></div>
+    <div class="footer-code">
+      <svg class="snow-icon" viewBox="0 0 24 24" width="14" height="14">
+        <path d="M12 2v20M4.5 6l15 12M19.5 6l-15 12M2 12h20M6 4.5l12 15M18 4.5l-12 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span id="footerCode">5591</span>
+    </div>
+  </footer>
+
+<script src="script.js"></script>
+</body>
+</html>
