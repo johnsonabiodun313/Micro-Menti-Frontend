@@ -203,3 +203,76 @@ function initScrollAnimations() {
         observer.observe(section);
     });
 }
+
+// 6. Join Session Modal Controls & Toast Notification System
+function openJoinModal() {
+    const modal = document.getElementById("join-session-modal");
+    const input = document.getElementById("session-code-input");
+    if (!modal) return;
+    
+    modal.classList.remove("hidden");
+    modal.classList.add("flex", "animate-fade-in");
+    
+    if (input) {
+        input.value = "";
+        setTimeout(() => input.focus(), 100);
+    }
+}
+
+function closeJoinModal() {
+    const modal = document.getElementById("join-session-modal");
+    if (!modal) return;
+    
+    modal.classList.add("hidden");
+    modal.classList.remove("flex", "animate-fade-in");
+}
+
+// Close modal when clicking outside the panel
+document.addEventListener("mousedown", (e) => {
+    const modal = document.getElementById("join-session-modal");
+    if (!modal || modal.classList.contains("hidden")) return;
+    
+    const panel = modal.querySelector(".glass-panel");
+    if (panel && !panel.contains(e.target)) {
+        closeJoinModal();
+    }
+});
+
+function handleJoinSubmit(event) {
+    event.preventDefault();
+    const input = document.getElementById("session-code-input");
+    if (!input) return;
+    
+    const code = input.value.trim().toUpperCase();
+    if (!code) return;
+    
+    // Simulate join action
+    showToast(`Joining Session <span class="text-cyan-400 font-mono font-bold">${code}</span>... Please wait.`, "success");
+    closeJoinModal();
+}
+
+function showToast(message, type = "success") {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+    
+    const toast = document.createElement("div");
+    toast.className = "toast-card flex items-center gap-3 px-5 py-4 text-sm text-gray-200 pointer-events-auto max-w-sm";
+    
+    const icon = type === "success" ? "check_circle" : "info";
+    const iconColor = type === "success" ? "text-cyan-400" : "text-purple-400";
+    
+    toast.innerHTML = `
+        <span class="material-symbols-outlined ${iconColor} shrink-0">${icon}</span>
+        <div class="flex-grow">${message}</div>
+        <button onclick="this.parentElement.remove()" class="material-symbols-outlined text-xs text-gray-500 hover:text-white transition-colors shrink-0 ml-2">close</button>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Remove element after animation completes (3.85s matches the css fadeOut animation duration)
+    setTimeout(() => {
+        if (toast.parentElement) {
+            toast.remove();
+        }
+    }, 3850);
+}
