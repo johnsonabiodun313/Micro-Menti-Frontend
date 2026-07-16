@@ -1,2 +1,3 @@
 # Micro-Menti-Frontend
-User Interface for the Menti Project
+
+The user interface for the frontend project.

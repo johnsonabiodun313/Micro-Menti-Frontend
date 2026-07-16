@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Micro-Menti | Presenter Dashboard</title>
+    <!-- Modern Typography: Inter & JetBrains Mono + Google Material Symbols Icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="app-container">
+      <!-- Top Navigation Bar -->
+      <header class="app-header">
+        <div class="header-left">
+          <!-- Mobile Menu Toggle -->
+          <button
+            class="header-btn menu-toggle-btn"
+            id="menuToggleBtn"
+            aria-label="Toggle Control Panel Drawer"
+            aria-expanded="false"
+            aria-controls="controlSidebar"
+          >
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+
+          <!-- Logo & Brand -->
+          <a
+            href="#"
+            class="logo-section"
+            aria-label="Micro-Menti Presenter Home"
+          >
+            <img
+              alt="Micro-Menti Logo"
+              class="logo-img"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAYAAACAvzbMAAAQAElEQVR4Aezdb4xl510f8Oe5a4e0wrNr76pJUEOByiRSVUIikOLKTtMKNV63Nm0QUmPTxN6/VaXwom0wVKVs3rQ4UF7Am+x61naa2GmJoLGpvE5FRZUQERSEjUCCJAIkW8JxtOvdWdvEjnfu4ZzZveudmfv/nj/POeczmjv33vPneX7P53d2vnPvrL2D4IMAAQIECCwhIECWQHMKAQIECIQgQFwFBJoSMC+BlgsIkJY3UPkECBBoSkCANCVvXgIECLRcoMUB0nJ55RMgQKDlAgKk5Q1UPgECBJoSECBNyZuXQIsFlE6gEBAghYIbAQIECCwsIEAWJnMCAQIECBQCAqRQqPtmPgIECHRAQIB0oImWQIAAgSYEBEgT6uYkQKApAfOWKCBASsQ0FAECBPokIED61G1rJUCAQIkCAqREzD4MZY0ECBAYCQiQkYR7AgQIEFhIQIAsxOVgAgQINCWQ3rwCJL2eqIgAAQKtEBAgrWiTIgkQIJCegABJrycqqkbAqAQIlCwgQEoGNRwBAgT6IiBA+tJp6yRAgEDJAnMHSMnzGo4AAQIEWi4gQFreeQOUTIECgKQEB0pS8eQnMLeBAAmkKCJA0+6IqAgQIJC8gQJJvkQIJECCQpkAfAiRNeVURIECg5QICpOUNVD4BAgSaEhAgTcmbl0AfBKyx0wICpNPttTgCBAhUJyBAqrM1MgECBDotIECSbq/iCBAgkK6AAEm3NyojQIBA0gICJOn2KI4AgaYEzDtbQIDMNnIEAQIECIwRECBjUGwiQIAAgdkCAmS2kSOWEXAOAQKdFxAgnW+xBRIgQKAaAQFSjatRCRAg0JRAbfMKkNqoTUSAAIFuCQiQbvXTaggQIFCbgACpjdpEbRFQJwEC8wkIkPmcHEWAAAECOwQEyA4QTwkQIEBgPoHyA2S+eR1FgAABAi0XECAtb6DyCRAg0JSAAGlK3rwEyhcwIoFaBQRIrdwmI0CAQHcEBEh3emklBAgQqFVAgFzD7SEBAgQIzC8gQOa3ciQBAgQIXCMgQK7B8JAAgaYEzNtGAQHSxq6pmQABAgkICJAEmqAEAgQItFFAgLSxa7trtoUAAQK1CwiQ2slNSIAAgW4ICJBu9NEqCBBoSqDH8wqQHjff0gkQILCKgABZRc+5BAgQ6LGAAOlx89NYuioIEGirgABpa+fUTYAAgYYFBEjDDTA9AQIEmhJYdV4Bsqqg8wkQINBTAQHS08ZbNgECBFYVECCrCjq/vwWright+5BAgQ6LGAAOlx89NYuioIEGirgABpa+fUTYAAgYYFBEjDDTA9AQIEmhJYdV4Bsqqg8wkQINBTAQHS08ZbNgECBFYVECCrCjq/vwUDPg8LdG1cgpwAAAABJRU5ErkJggg=="
+            />
+            <span class="logo-text">Micro-Menti</span>
+          </a>
+        </div>
+
+        <!-- Session Badge (Join Instructions) -->
+        <div class="session-badge" aria-label="Session connection parameters">
+          <span class="session-url"
+            >Join at <strong>micro-menti.io</strong></span
+          >
+          <div class="session-code-container">
+            <span class="session-code-label">Code</span>
+            <span class="session-code" id="sessionCodeVal">5591</span>
+          </div>
+        </div>
+
+        <!-- Header Actions & Badges -->
+        <div class="header-right">
+          <!-- Live Status Badge -->
+          <div class="live-badge" aria-label="Status: Live voting active">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span>LIVE</span>
+          </div>
+
+          <!-- Participants Counter (Header Quick View) -->
+          <div
+            class="session-badge"
+            style="padding: var(--space-2) var(--space-3)"
+            aria-label="Total participants connected"
+          >
+            <span
+              class="material-symbols-outlined"
+              style="color: var(--primary); font-size: 16px; margin-right: 4px"
+              >group</span
+            >
+            <span
+              class="font-mono"
+              style="font-size: 13px; color: var(--text-main); font-weight: 600"
+              >342 Joined</span
+            >
+          </div>
+
+          <!-- Fullscreen Toggle Placeholder Button -->
+          <button
+            class="header-btn"
+            id="fullscreenBtn"
+            aria-label="Toggle Fullscreen Presentation Mode"
+          >
+            <span class="material-symbols-outlined" id="fullscreenIcon"
+              >fullscreen</span
+            >
+          </button>
+        </div>
+      </header>
+
+      <!-- Sidebar Controls Panel -->
+      <aside
+        class="control-sidebar"
+        id="controlSidebar"
+        role="complementary"
+        aria-label="Poll Controls"
+      >
+        <div>
+          <h2 class="sidebar-title">Poll Controls</h2>
+          <nav class="control-group" aria-label="Presenter Action Options">
+            <button
+              class="control-btn danger-action"
+              id="resetPollBtn"
+              aria-label="Reset current poll data"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true"
+                >delete_sweep</span
+              >
+              <span>Reset Poll</span>
+            </button>
+            <button
+              class="control-btn"
+              id="lockPollBtn"
+              aria-label="Lock poll entries"
+            >
+              <span
+                class="material-symbols-outlined"
+                id="lockBtnIcon"
+                aria-hidden="true"
+                >lock</span
+              >
+              <span id="lockBtnText">Lock Poll</span>
+            </button>
+            <button
+              class="control-btn"
+              id="pausePollBtn"
+              aria-label="Pause incoming response animations"
+            >
+              <span
+                class="material-symbols-outlined"
+                id="pauseBtnIcon"
+                aria-hidden="true"
+                >pause</span
+              >
+              <span id="pauseBtnText">Pause Poll</span>
+            </button>
+            <button
+              class="control-btn"
+              id="downloadImageBtn"
+              aria-label="Download word cloud canvas as an image"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true"
+                >download</span
+              >
+              <span>Download Image</span>
+            </button>
+            <button
+              class="control-btn"
+              id="settingsBtn"
+              aria-label="Open presentation settings dashboard"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true"
+                >settings</span
+              >
+              <span>Settings</span>
+            </button>
+            <a href="/end_screen/end.html">
+              <button
+                class="control-btn endSessionBtn-icon-btn"
+                id="ndSessionBtn"
+                aria-label="End current presentation session"
+              >
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                ></span>
+                <span>End Session</span>
+              </button>
+            </a>
+          </nav>
+        </div>
+
+        <!-- Sidebar footer: System Online status card -->
+        <div class="sidebar-footer">
+          <div class="system-status-card" aria-label="System status online">
+            <div class="system-indicator" aria-hidden="true"></div>
+            <span class="system-text">System Online</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Drawer overlay for mobile sidebar -->
+      <div
+        class="drawer-overlay"
+        id="drawerOverlay"
+        role="presentation"
+        aria-hidden="true"
+      ></div>
+
+      <!-- Main Presentation Screen Content -->
+      <main class="main-content">
+        <!-- Floating Responses Widget -->
+        <div
+          class="response-counter-widget"
+          aria-label="Total responses registered"
+        >
+          <span class="response-count" id="responseCounterVal">342</span>
+          <span class="response-label">Responses</span>
+        </div>
+
+        <!-- Question Area -->
+        <section
+          class="question-container"
+          aria-labelledby="activeQuestionHeader"
+        >
+          <span class="question-label">Active Question</span>
+          <h1 class="question-text" id="activeQuestionHeader">
+            Describe microservices in one word
+          </h1>
+        </section>
+
+        <!-- Word Cloud Display Area -->
+        <div
+          class="word-cloud-container"
+          id="wordcloud"
+          aria-label="Live Word Cloud Results"
+        >
+          <div class="cloud-background-glow" aria-hidden="true"></div>
+          <div class="scan-line" aria-hidden="true"></div>
+
+          <!-- Statically Styled Words (arranged elegantly inside center focus) -->
+          <!-- Scalable (Center Hero Word) -->
+          <div
+            class="word-tag word-xl word-primary"
+            style="top: 45%; left: 35%"
+            aria-label="Word: Scalable, Size: Maximum"
+          >
+            Scalable
+          </div>
+
+          <!-- Complex (Right Center Main Word) -->
+          <div
+            class="word-tag word-lg word-secondary"
+            style="top: 25%; left: 56%"
+            aria-label="Word: Complex, Size: High"
+          >
+            Complex
+          </div>
+
+          <!-- Distributed (Left Center Main Word) -->
+          <div
+            class="word-tag word-md word-secondary"
+            style="top: 56%; left: 20%"
+            aria-label="Word: Distributed, Size: Medium High"
+          >
+            Distributed
+          </div>
+
+          <!-- Fast (Center Bottom Word) -->
+          <div
+            class="word-tag word-md word-primary"
+            style="top: 65%; left: 48%"
+            aria-label="Word: Fast, Size: Medium"
+          >
+            Fast
+          </div>
+
+          <!-- Decoupled (Left Outer Word) -->
+          <div
+            class="word-tag word-md word-muted"
+            style="top: 30%; left: 24%"
+            aria-label="Word: Decoupled, Size: Medium"
+          >
+            Decoupled
+          </div>
+
+          <!-- Agile (Center Top Word) -->
+          <div
+            class="word-tag word-sm word-primary"
+            style="top: 18%; left: 40%"
+            aria-label="Word: Agile, Size: Small Medium"
+          >
+            Agile
+          </div>
+
+          <!-- Cloud (Left Bottom Word) -->
+          <div
+            class="word-tag word-sm word-muted"
+            style="top: 74%; left: 32%"
+            aria-label="Word: Cloud, Size: Small Medium"
+          >
+            Cloud
+          </div>
+
+          <!-- K8s (Right Bottom Word) -->
+          <div
+            class="word-tag word-sm word-secondary"
+            style="top: 70%; left: 62%"
+            aria-label="Word: K8s, Size: Small Medium"
+          >
+            K8s
+          </div>
+
+          <!-- DevOps (Right Top Word) -->
+          <div
+            class="word-tag word-sm word-muted"
+            style="top: 16%; left: 68%"
+            aria-label="Word: DevOps, Size: Small Medium"
+          >
+            DevOps
+          </div>
+
+          <!-- Granular (Far Left Word) -->
+          <div
+            class="word-tag word-xs word-muted"
+            style="top: 48%; left: 14%"
+            aria-label="Word: Granular, Size: Small"
+          >
+            Granular
+          </div>
+
+          <!-- Docker (Far Right Word) -->
+          <div
+            class="word-tag word-xs word-secondary"
+            style="top: 46%; left: 80%"
+            aria-label="Word: Docker, Size: Small"
+          >
+            Docker
+          </div>
+
+          <!-- Messy (Far Left Top Word) -->
+          <div
+            class="word-tag word-xs word-error"
+            style="top: 18%; left: 16%"
+            aria-label="Word: Messy, Size: Small"
+          >
+            Messy
+          </div>
+        </div>
+
+        <!-- Progress Tracking Laser Bar -->
+        <div class="progress-laser-track" aria-hidden="true">
+          <div class="progress-laser-fill"></div>
+        </div>
+      </main>
+
+      <!-- Bottom Status Bar (Telemetry / System Specs) -->
+      <footer class="status-bar" role="contentinfo">
+        <div class="telemetry-group">
+          <!-- Latency -->
+          <div class="telemetry-item">
+            <span class="telemetry-label">Latency:</span>
+            <span class="telemetry-val">14ms</span>
+          </div>
+          <div class="telemetry-divider" aria-hidden="true"></div>
+
+          <!-- Connection Status -->
+          <div class="telemetry-item">
+            <span class="telemetry-label" style="color: var(--text-muted)"
+              >Connection:</span
+            >
+            <span class="telemetry-val" style="color: var(--success)"
+              >Secure</span
+            >
+          </div>
+          <div class="telemetry-divider" aria-hidden="true"></div>
+
+          <!-- Transport Type -->
+          <div class="telemetry-item">
+            <span class="telemetry-label" style="color: var(--text-muted)"
+              >Transport:</span
+            >
+            <span class="telemetry-val" style="color: var(--success)"
+              >WebSockets</span
+            >
+          </div>
+          <div class="telemetry-divider" aria-hidden="true"></div>
+
+          <!-- Participants Connected -->
+          <div class="telemetry-item">
+            <span class="telemetry-label" style="color: var(--text-muted)"
+              >Participants:</span
+            >
+            <span
+              class="telemetry-val"
+              style="color: var(--success)"
+              id="footerParticipantsVal"
+              >342</span
+            >
+          </div>
+        </div>
+
+        <!-- Footer Documentation and Status Quick Links -->
+        <div class="status-links">
+          <a
+            href="#"
+            class="status-link"
+            aria-label="System status board website link"
+            >System Status</a
+          >
+          <a
+            href="#"
+            class="status-link"
+            aria-label="Micro-Menti developer documentation link"
+            >Documentation</a
+          >
+        </div>
+      </footer>
+    </div>
+
+    <!-- Script connection -->
+    <script src="script.js"></script>
+  </body>
+</html>
