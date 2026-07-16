@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Results</title>
+    <link rel="stylesheet" href="./viewersResult.css">
+</head>
+<body>
+       <!-- Top navigation -->
+  <header class="topnav">
+    <div class="logo">Micro-Menti</div>
+    <!-- <nav class="tabs">
+      <a href="#" class="tab active">Presenter Screen</a>
+      <a href="#" class="tab">Participant View</a>
+    </nav> -->
+    <div class="join-code">Join: <span id="joinCode">5591</span></div>
+  </header>
+ 
+  <div class="layout">
+ 
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>Poll Controls</h1>
+        <p class="session-label">Active session: <span id="sessionId">5591</span></p>
+      </div>
+ 
+      <nav class="poll-actions">
+        <!-- <button class="action-row" id="clearBtn">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 7h16M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3m2 0v13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7h12z"/>
+            <line x1="4" y1="10" x2="20" y2="10"/>
+          </svg>
+          <span>Clear Responses</span>
+        </button>
+ 
+        <button class="action-row" id="lockBtn">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="5" y="11" width="14" height="9" rx="2"/>
+            <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+          </svg>
+          <span>Lock Poll</span>
+        </button> -->
+ 
+        <button class="action-row primary" id="downloadBtn">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3v12m0 0l-4-4m4 4l4-4"/>
+            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+          </svg>
+          <span>Download Image</span>
+        </button>
+      </nav>
+ 
+      <div class="session-status">
+        <div class="status-row">
+          <span class="status-label">Session Status</span>
+          <span class="status-dot" id="statusDot"></span>
+        </div>
+        <p class="status-text" id="statusText">Session Ended</p>
+      </div>
+    </aside>
+ 
+    <!-- Main content -->
+    <main class="content">
+ 
+      <div class="contributions-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="12" width="4" height="8" rx="1"/>
+          <rect x="10" y="8" width="4" height="12" rx="1"/>
+          <rect x="17" y="4" width="4" height="16" rx="1"/>
+        </svg>
+        <span><span id="totalContributions">342</span> total contributions</span>
+      </div>
+ 
+      <h2 class="title">Final Synthesis</h2>
+      <p class="subtitle">Session Snapshot ID: <span id="snapshotId">#8829-AF</span></p>
+ 
+      <section class="word-cloud-panel" id="wordCloud">
+        <span class="tag" style="--fs:56px; --c:1; left:29%; top:33%;">Scalable</span>
+        <span class="tag" style="--fs:32px; --c:2; left:50%; top:35%;">Complex</span>
+        <span class="tag" style="--fs:52px; --c:1; left:69%; top:32%;">Fast</span>
+        <span class="tag" style="--fs:19px; --c:3; left:87%; top:28%;">Efficient</span>
+        <span class="tag" style="--fs:19px; --c:3; left:80%; top:47%;">Robust</span>
+        <span class="tag" style="--fs:19px; --c:3; left:57%; top:69%;">Minimalist</span>
+        <div class="live-data-badge">LIVE_DATA</div>
+      </section>
+ 
+      <section class="stats-grid">
+        <div class="stat-card">
+          <p class="stat-label">Avg Response Time</p>
+          <p class="stat-value" id="avgResponse">1.4s</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Engagement Rate</p>
+          <p class="stat-value" id="engagement">94.2%</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Unique Tokens</p>
+          <p class="stat-value" id="uniqueTokens">128</p>
+        </div>
+      </section>
+ 
+    </main>
+  </div>
+ 
+  <footer class="statusbar">
+    <div class="statusbar-left">
+      <span class="dot green"></span>
+      <span>Latency: <span id="latency">14ms</span></span>
+      <span class="divider">Transport: Websockets</span>
+    </div>
+    <div class="statusbar-right">
+      <span class="connected">Connected: <span id="connectedCount">342</span></span>
+      <span>System Status</span>
+      <span>Documentation</span>
+    </div>
+  </footer>  
+  <script src="./viewersResult.js"></script>
+</body>
+</html>
