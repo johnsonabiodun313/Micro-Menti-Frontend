@@ -1,278 +1,214 @@
-// Tailwind Custom Configuration
-tailwind.config = {
-    darkMode: "class",
-    theme: {
-        extend: {
-            colors: {
-                background: "#030303",
-                surface: "rgba(10, 10, 15, 0.7)",
-                border: "rgba(255, 255, 255, 0.08)",
-                primary: "#8b5cf6",
-                secondary: "#06b6d4",
-                success: "#10b981",
-                danger: "#ef4444"
-            },
-            fontFamily: {
-                sans: ["Outfit", "Plus Jakarta Sans", "Inter", "sans-serif"],
-                mono: ["JetBrains Mono", "monospace"]
-            }
-        }
-    }
-};
-
-// Marketing Hero Word Cloud Dataset
 let sandboxWords = [
-    { text: "Interactive", count: 32 },
-    { text: "Fast", count: 24 },
-    { text: "Simple", count: 28 },
-    { text: "Scalable", count: 18 },
-    { text: "WebSockets", count: 15 },
-    { text: "Engaging", count: 22 },
+    { text: "Interactive", count: 32 }, { text: "Fast", count: 24 }, { text: "Simple", count: 28 },
+    { text: "Scalable", count: 18 }, { text: "WebSockets", count: 15 }, { text: "Engaging", count: 22 },
     { text: "Modern", count: 14 }
 ];
 
-// Initialize on page load
 document.addEventListener("DOMContentLoaded", () => {
-    generateBackgroundParticles();
-    renderWordCloud("sandbox-cloud", sandboxWords);
-    initScrollAnimations();
+    genParticles();
+    drawCloud("sandbox-cloud", sandboxWords);
+    initScroll();
+    initParticipant();
 });
 
-// 1. Particle Background Generator
-function generateBackgroundParticles() {
-    const container = document.getElementById("particle-container");
-    if (!container) return;
-    
-    container.innerHTML = "";
-    const particleCount = 20; // Lightweight count for fluid browser tests
-    
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement("div");
-        particle.className = "particle";
-        
-        const size = Math.random() * 4 + 2; // 2px to 6px
-        const left = Math.random() * 100; // 0% to 100%
-        const delay = Math.random() * 8; // 0s to 8s delay
-        const speed = Math.random() * 8 + 8; // 8s to 16s speed
-        const opacity = Math.random() * 0.2 + 0.05; // 0.05 to 0.25 opacity
-        const drift = Math.random() * 30 - 15; // -15px to 15px drift
-        
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${left}%`;
-        particle.style.animationDelay = `${delay}s`;
-        particle.style.setProperty("--speed", `${speed}s`);
-        particle.style.setProperty("--opacity", opacity);
-        particle.style.setProperty("--drift", `${drift}px`);
-        
-        container.appendChild(particle);
+function genParticles() {
+    const c = document.getElementById("particle-container");
+    if (!c) return;
+    c.innerHTML = "";
+    for (let i = 0; i < 20; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        const sz = Math.random() * 4 + 2, l = Math.random() * 100;
+        const d = Math.random() * 8, sp = Math.random() * 8 + 8;
+        const o = Math.random() * 0.2 + 0.05, dr = Math.random() * 30 - 15;
+        p.style.width = p.style.height = `${sz}px`;
+        p.style.left = `${l}%`;
+        p.style.animationDelay = `${d}s`;
+        p.style.setProperty("--speed", `${sp}s`);
+        p.style.setProperty("--opacity", o);
+        p.style.setProperty("--drift", `${dr}px`);
+        c.appendChild(p);
     }
 }
 
-// 2. Interactive Word Cloud Compiler/Renderer (Landing Sandbox)
-function renderWordCloud(containerId, wordsList) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    
-    container.innerHTML = "";
-    
-    if (wordsList.length === 0) {
-        container.innerHTML = `<span class="text-gray-500 font-mono text-sm">No words yet. Submit below!</span>`;
+function drawCloud(cId, list) {
+    const c = document.getElementById(cId);
+    if (!c) return;
+    c.innerHTML = "";
+    if (!list.length) {
+        c.innerHTML = `<span class="font-mono" style="color:#555;font-size:14px;">No words yet!</span>`;
         return;
     }
-
-    // Sort words by count to scale sizes
-    const sortedWords = [...wordsList].sort((a, b) => b.count - a.count);
-    const maxCount = Math.max(...sortedWords.map(w => w.count));
-    const minCount = Math.min(...sortedWords.map(w => w.count));
-    
-    // Color pool for tags
-    const colors = [
-        { text: "text-purple-400", glow: "rgba(139, 92, 246, 0.4)" },
-        { text: "text-cyan-400", glow: "rgba(6, 182, 212, 0.4)" },
-        { text: "text-blue-400", glow: "rgba(59, 130, 246, 0.4)" },
-        { text: "text-indigo-400", glow: "rgba(99, 102, 241, 0.4)" },
-        { text: "text-teal-300", glow: "rgba(45, 212, 191, 0.4)" }
+    const sorted = [...list].sort((a, b) => b.count - a.count);
+    const max = Math.max(...sorted.map(w => w.count)), min = Math.min(...sorted.map(w => w.count));
+    const cls = [
+        { c: "word-primary", g: "rgba(139,92,246,0.4)" },
+        { c: "word-secondary", g: "rgba(6,182,212,0.4)" },
+        { c: "word-muted", g: "rgba(156,163,175,0.2)" }
     ];
-
-    sortedWords.forEach((word, index) => {
-        const span = document.createElement("span");
-        
-        // Calculate responsive font size based on count relative to max/min
-        let fontSize = 14; // Default baseline size
-        if (maxCount !== minCount) {
-            const ratio = (word.count - minCount) / (maxCount - minCount);
-            fontSize = 14 + Math.round(ratio * 24); // Scales from 14px to 38px
-        } else if (word.count > 0) {
-            fontSize = 18; 
-        }
-        
-        span.className = "word-cloud-tag font-bold py-1 px-2";
-        span.style.fontSize = `${fontSize}px`;
-        
-        // Assign random parameters for float animations
-        const duration = (Math.random() * 3 + 4).toFixed(1); // 4s to 7s
-        const delay = (Math.random() * 2).toFixed(1); // 0s to 2s
-        const rotation = (Math.random() * 4 - 2).toFixed(1); // -2deg to 2deg
-        
-        span.style.setProperty("--duration", `${duration}s`);
-        span.style.setProperty("--delay", `${delay}s`);
-        span.style.setProperty("--rotate", `${rotation}deg`);
-        
-        // Assign color
-        const color = colors[index % colors.length];
-        span.classList.add(color.text);
-        span.style.setProperty("--glow-color", color.glow);
-        
-        // Content with subscript votes count representation
-        span.innerHTML = `${word.text} <sub class="text-[9px] opacity-40 font-mono align-super font-normal ml-0.5">${word.count}</sub>`;
-        
-        // Click to vote/grow interaction
-        span.onclick = (e) => {
+    sorted.forEach((w, i) => {
+        const s = document.createElement("span");
+        let f = 14;
+        if (max !== min) f = 14 + Math.round(((w.count - min) / (max - min)) * 20);
+        s.className = "word-tag font-bold";
+        s.style.fontSize = `${f}px`;
+        s.style.position = "static";
+        s.style.transform = "none";
+        s.style.display = "inline-block";
+        s.style.cursor = "pointer";
+        s.style.setProperty("--rotate", `${(Math.random() * 4 - 2).toFixed(1)}deg`);
+        const item = cls[i % cls.length];
+        s.classList.add(item.c);
+        s.style.setProperty("--glow-color", item.g);
+        s.innerHTML = `${w.text} <sub style="font-size:9px;opacity:0.4;vertical-align:super;margin-left:2px;">${w.count}</sub>`;
+        s.onclick = (e) => {
             e.stopPropagation();
-            word.count += 2;
-            flashTag(span);
-            setTimeout(() => renderWordCloud(containerId, wordsList), 150);
+            w.count += 2;
+            s.style.transform = "scale(1.2) rotate(3deg)";
+            setTimeout(() => drawCloud(cId, list), 150);
         };
-        
-        container.appendChild(span);
+        c.appendChild(s);
     });
 }
 
-function flashTag(element) {
-    element.style.transform = "scale(1.3) rotate(3deg)";
-    element.style.transition = "transform 0.1s ease-out";
-}
-
-// 3. Form Submission Handler
-function handleSandboxSubmit(event) {
-    event.preventDefault();
+function handleSandboxSubmit(e) {
+    e.preventDefault();
     const input = document.getElementById("sandbox-input");
     if (!input) return;
-    
-    const wordText = input.value.trim().toLowerCase();
-    if (!wordText) return;
-    
-    // Add or increment word count
-    const existing = sandboxWords.find(w => w.text.toLowerCase() === wordText);
-    if (existing) {
-        existing.count += 1;
-    } else {
-        sandboxWords.push({ text: wordText, count: 1 });
-    }
-    
-    renderWordCloud("sandbox-cloud", sandboxWords);
+    const txt = input.value.trim().split(/\s+/)[0];
+    if (!txt) return;
+    const match = sandboxWords.find(w => w.text.toLowerCase() === txt.toLowerCase());
+    if (match) match.count++; else sandboxWords.push({ text: txt, count: 1 });
+    drawCloud("sandbox-cloud", sandboxWords);
     input.value = "";
+    showToast(`Added "${txt}" to demo!`);
 }
 
-// 4. Mobile Menu Toggle
-let isMobileMenuOpen = false;
 function toggleMobileMenu() {
-    const mobileMenu = document.getElementById("mobile-menu");
-    if (!mobileMenu) return;
-    
-    isMobileMenuOpen = !isMobileMenuOpen;
-    if (isMobileMenuOpen) {
-        mobileMenu.classList.remove("hidden");
-    } else {
-        mobileMenu.classList.add("hidden");
-    }
+    const m = document.getElementById("mobile-menu");
+    if (m) m.classList.toggle("active");
 }
 
-// 5. Scroll Intersection Fade-in Animations
-function initScrollAnimations() {
-    const sections = document.querySelectorAll("section");
-    
-    const observerOptions = {
-        root: null,
-        rootMargin: "0px",
-        threshold: 0.1
-    };
-    
-    const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("active");
-                obs.unobserve(entry.target);
+function initScroll() {
+    const list = document.querySelectorAll("section");
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.style.opacity = "1";
+                e.target.style.transform = "translateY(0)";
             }
         });
-    }, observerOptions);
-    
-    sections.forEach(section => {
-        section.classList.add("fade-in-up");
-        observer.observe(section);
+    }, { threshold: 0.1 });
+    list.forEach(s => {
+        s.style.opacity = "0";
+        s.style.transform = "translateY(20px)";
+        s.style.transition = "opacity .6s ease, transform .6s ease";
+        obs.observe(s);
     });
 }
 
-// 6. Join Session Modal Controls & Toast Notification System
 function openJoinModal() {
-    const modal = document.getElementById("join-session-modal");
-    const input = document.getElementById("session-code-input");
-    if (!modal) return;
-    
-    modal.classList.remove("hidden");
-    modal.classList.add("flex", "animate-fade-in");
-    
-    if (input) {
-        input.value = "";
-        setTimeout(() => input.focus(), 100);
-    }
+    const m = document.getElementById("join-session-modal"), input = document.getElementById("session-code-input");
+    if (!m) return;
+    m.classList.add("flex", "animate-fade-in");
+    if (input) { input.value = ""; setTimeout(() => input.focus(), 100); }
 }
 
 function closeJoinModal() {
-    const modal = document.getElementById("join-session-modal");
-    if (!modal) return;
-    
-    modal.classList.add("hidden");
-    modal.classList.remove("flex", "animate-fade-in");
+    const m = document.getElementById("join-session-modal");
+    if (m) m.classList.remove("flex", "animate-fade-in");
 }
 
-// Close modal when clicking outside the panel
 document.addEventListener("mousedown", (e) => {
-    const modal = document.getElementById("join-session-modal");
-    if (!modal || modal.classList.contains("hidden")) return;
-    
-    const panel = modal.querySelector(".glass-panel");
-    if (panel && !panel.contains(e.target)) {
-        closeJoinModal();
-    }
+    const m = document.getElementById("join-session-modal");
+    if (m && m.classList.contains("flex") && !m.querySelector(".modal-content-panel").contains(e.target)) closeJoinModal();
 });
 
-function handleJoinSubmit(event) {
-    event.preventDefault();
+function handleJoinSubmit(e) {
+    e.preventDefault();
     const input = document.getElementById("session-code-input");
-    if (!input) return;
-    
-    const code = input.value.trim().toUpperCase();
-    if (!code) return;
-    
-    // Simulate join action
-    showToast(`Joining Session <span class="text-cyan-400 font-mono font-bold">${code}</span>... Please wait.`, "success");
-    closeJoinModal();
+    if (input) {
+        const val = input.value.trim().toUpperCase();
+        if (val) { closeJoinModal(); joinSession(val); }
+    }
 }
 
-function showToast(message, type = "success") {
+function joinSession(code) {
+    const l = document.getElementById("landing-page-container"), p = document.getElementById("participant-view-container");
+    const badge = document.getElementById("joined-code-badge"), input = document.getElementById("participant-word-input");
+    if (l && p) {
+        l.classList.add("hidden");
+        p.classList.remove("hidden");
+        if (badge) badge.innerText = `JOINED: ${code}`;
+        showToast(`Joined session ${code}!`);
+        if (input) {
+            input.value = "";
+            document.getElementById("participant-char-count").innerText = "0";
+            document.getElementById("participant-submit-btn").disabled = true;
+            setTimeout(() => input.focus(), 100);
+        }
+    }
+}
+
+function leaveSession() {
+    const l = document.getElementById("landing-page-container"), p = document.getElementById("participant-view-container");
+    if (l && p) { p.classList.add("hidden"); l.classList.remove("hidden"); showToast("Left session."); }
+}
+
+function initParticipant() {
+    const input = document.getElementById("participant-word-input");
+    const count = document.getElementById("participant-char-count");
+    const btn = document.getElementById("participant-submit-btn");
+    const lat = document.getElementById("participant-latency");
+    if (!input || !btn) return;
+    
+    input.addEventListener("input", () => {
+        input.value = input.value.replace(/[\s\n\r]/g, "");
+        const len = input.value.length;
+        if (count) count.innerText = len;
+        btn.disabled = len === 0;
+    });
+
+    btn.addEventListener("click", () => {
+        const txt = input.value.trim();
+        if (!txt) return;
+        btn.disabled = true;
+        btn.innerText = "Submitting...";
+        setTimeout(() => {
+            showToast(`Submitted "${txt}"!`);
+            input.value = "";
+            if (count) count.innerText = "0";
+            btn.innerText = "Submit";
+            input.focus();
+        }, 800);
+    });
+
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") { e.preventDefault(); if (!btn.disabled) btn.click(); }
+    });
+
+    if (lat) {
+        setInterval(() => {
+            lat.innerText = `${Math.floor(Math.random() * 8) + 11}ms`;
+        }, 4000);
+    }
+}
+
+function showToast(msg, type = "success") {
     const container = document.getElementById("toast-container");
     if (!container) return;
-    
     const toast = document.createElement("div");
-    toast.className = "toast-card flex items-center gap-3 px-5 py-4 text-sm text-gray-200 pointer-events-auto max-w-sm";
-    
+    toast.className = "toast-card";
     const icon = type === "success" ? "check_circle" : "info";
-    const iconColor = type === "success" ? "text-cyan-400" : "text-purple-400";
-    
+    const color = type === "success" ? "var(--secondary)" : "var(--primary)";
     toast.innerHTML = `
-        <span class="material-symbols-outlined ${iconColor} shrink-0">${icon}</span>
-        <div class="flex-grow">${message}</div>
-        <button onclick="this.parentElement.remove()" class="material-symbols-outlined text-xs text-gray-500 hover:text-white transition-colors shrink-0 ml-2">close</button>
+        <span class="material-symbols-outlined" style="color:${color};font-size:18px;">${icon}</span>
+        <div style="flex-grow:1;">${msg}</div>
+        <button onclick="this.parentElement.remove()" class="material-symbols-outlined" style="font-size:16px;color:#555;background:transparent;">close</button>
     `;
-    
     container.appendChild(toast);
-    
-    // Remove element after animation completes (3.85s matches the css fadeOut animation duration)
     setTimeout(() => {
-        if (toast.parentElement) {
-            toast.remove();
-        }
-    }, 3850);
+        toast.classList.add("removing");
+        setTimeout(() => toast.remove(), 300);
+    }, 3500);
 }
