@@ -1,0 +1,103 @@
+/* ==========================================================================
+   Micro-Menti — Participant View (public/participant.js companion page)
+   Loaded after style.css. Relies on the CSS variables, resets, ambient-glow,
+   particle, glass-panel and mobile-card primitives defined there.
+   ========================================================================== */
+
+/* The shared .participant-textarea rule was written for a <textarea>; reuse it
+   for our single-line <input> too, it maps 1:1 apart from resize/rows. */
+.word-input {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.word-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* ---- Connection status pill ---- */
+.poll-status-indicator {
+  transition: color 0.25s ease;
+}
+.poll-status-indicator .status-indicator-dot {
+  transition:
+    background-color 0.25s ease,
+    animation 0.25s ease;
+}
+.poll-status-indicator.status-connecting .status-indicator-dot {
+  background-color: #f59e0b;
+  animation: pulse-ring 1.2s infinite;
+}
+.poll-status-indicator.status-connecting {
+  color: #f59e0b;
+}
+.poll-status-indicator.status-connected .status-indicator-dot {
+  background-color: var(--success);
+}
+.poll-status-indicator.status-connected {
+  color: var(--success);
+}
+.poll-status-indicator.status-error .status-indicator-dot {
+  background-color: var(--error);
+  animation: none;
+}
+.poll-status-indicator.status-error {
+  color: var(--error);
+}
+
+/* ---- Form fade-out on submit ---- */
+.participant-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+.participant-form.fading-out {
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
+
+/* ---- Success state ---- */
+.success-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 16px;
+  animation: successPopIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.success-icon {
+  font-size: 48px;
+  color: var(--success);
+  text-shadow: 0 0 24px rgba(16, 185, 129, 0.4);
+}
+.success-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+}
+.success-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+@keyframes successPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* successCard sits in normal flow once revealed; .hidden (from style.css) keeps it out of the layout until then */
+#successCard.hidden {
+  display: none;
+}

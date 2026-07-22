@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Micro-Menti | Submit Your Word</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="participant.css" />
+  </head>
+  <body class="selection-purple grid-lines">
+    <div class="ambient-glow">
+      <div
+        class="glow-blob glow-blob-purple"
+        style="top: -10%; left: -10%"
+      ></div>
+      <div
+        class="glow-blob glow-blob-cyan"
+        style="bottom: 15%; right: -10%"
+      ></div>
+      <div
+        class="glow-blob glow-blob-blue"
+        style="bottom: -10%; left: 20%"
+      ></div>
+    </div>
+    <div id="particle-container"></div>
+
+    <main class="participant-view-wrapper">
+      <div class="glass-panel mobile-card">
+        <div class="mobile-card-header">
+          <span class="mobile-card-logo">Micro-Menti</span>
+          <span id="roomBadge" class="mobile-card-badge">ROOM: MAIN</span>
+        </div>
+
+        <div class="participant-body">
+          <div
+            class="poll-status-indicator"
+            id="connectionStatus"
+            aria-live="polite"
+          >
+            <span class="status-indicator-dot" id="connectionDot"></span>
+            <span id="connectionText">Connecting…</span>
+          </div>
+
+          <!-- Submission form: hidden after a successful submit or if this device already submitted for this room -->
+          <form id="wordForm" class="participant-form" autocomplete="off">
+            <h2 class="participant-question">Submit your word</h2>
+            <div class="participant-input-card">
+              <input
+                type="text"
+                id="wordInput"
+                name="wordInput"
+                class="participant-textarea word-input"
+                maxlength="25"
+                placeholder="Enter one word (max 25 chars)..."
+                required
+                autocomplete="off"
+                inputmode="text"
+                aria-label="Your one-word response"
+              />
+              <div class="textarea-footer">
+                <span id="charCount">0</span>/25
+              </div>
+            </div>
+            <button
+              id="submitBtn"
+              type="submit"
+              class="btn-cyan participant-submit-btn"
+              disabled
+            >
+              Submit Word
+            </button>
+          </form>
+
+          <!-- Success state: hidden until a submission goes through -->
+          <div
+            id="successCard"
+            class="success-card hidden"
+            role="status"
+            aria-live="polite"
+          >
+            <span
+              class="material-symbols-outlined success-icon"
+              aria-hidden="true"
+              >check_circle</span
+            >
+            <p class="success-title">Response sent!</p>
+            <p class="success-desc">Thank you for participating.</p>
+          </div>
+        </div>
+
+        <div class="participant-statusbar">
+          <div style="display: flex; align-items: center; gap: 6px">
+            <span
+              class="material-symbols-outlined"
+              style="font-size: 14px; color: var(--secondary)"
+              >bolt</span
+            >
+            Latency: <span id="participant-latency">--ms</span>
+          </div>
+          <div class="statusbar-divider"></div>
+          <div>WebSockets</div>
+        </div>
+      </div>
+    </main>
+
+    <div id="toastContainer"></div>
+
+    <!-- Socket.io client (CDN) -->
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="participant.js" defer></script>
+  </body>
+</html>
