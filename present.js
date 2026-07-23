@@ -307,11 +307,6 @@ if (downloadImageBtn) {
   });
 }
 
-if (settingsBtn)
-  settingsBtn.addEventListener("click", () =>
-    showToast("Settings configured (Demo)"),
-  );
-
 // ---------------------------------------------------------------------------
 // Toasts
 // ---------------------------------------------------------------------------
