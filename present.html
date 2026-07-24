@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presenter Dashboard | Micro-Menti</title>
+    <!-- Material Symbols for icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <!-- Pure Vanilla CSS Design System (< 50KB total footprint) -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Ambient Neon Background Blobs -->
+    <div class="glow-blob glow-blob-purple" style="top: -10%; left: 10%;"></div>
+    <div class="glow-blob glow-blob-cyan" style="bottom: -15%; right: 10%;"></div>
+    <div class="glow-blob glow-blob-blue" style="top: 40%; right: 35%;"></div>
+    <div id="particle-container" style="position: fixed; inset: 0; pointer-events: none; z-index: 0;"></div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="navbar" style="position: relative; z-index: 50;">
+        <div class="navbar-inner">
+            <a href="./index.html" class="brand-link">
+                <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.5 54.5L53.5 33.5L63.5 43.5H79L89.5 54.5" stroke="#A5B4FC" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="24" y="39" width="30" height="10" rx="5" fill="#5B62F4"/>
+                    <rect x="59" y="34" width="20" height="7.5" rx="3.75" fill="#13B497"/>
+                    <rect x="34" y="54" width="40" height="15" rx="7.5" fill="#7E80FE"/>
+                </svg>
+                <span>Micro-Menti <span style="font-size: 0.75rem; font-weight: 500; color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.3); padding: 2px 8px; border-radius: 6px; margin-left: 6px;">PRESENTER</span></span>
+            </a>
+            <div class="nav-actions">
+                <div style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--color-border); padding: 6px 14px; border-radius: 12px; font-size: 0.85rem;">
+                    <span style="color: var(--color-text-muted);">Session PIN:</span>
+                    <span class="session-pin-display text-gradient-purple-cyan" style="font-weight: 800; font-family: var(--font-mono); font-size: 1.05rem;">5591</span>
+                </div>
+                <span class="badge-live" style="display: flex; align-items: center; gap: 6px;">
+                    <span id="connectionIndicatorDot" style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 8px #f59e0b;"></span>
+                    Connecting...
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Task 2: Large-Display Dashboard Grid Container -->
+    <main style="position: relative; z-index: 10;">
+        <div class="dashboard-grid">
+            <!-- Left Area: Live Interactive Word Cloud Stage -->
+            <section style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Stage Header / Prompt Box -->
+                <div class="glass-panel" style="padding: 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
+                    <div style="flex: 1; min-width: 280px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 0.75rem; font-family: var(--font-mono); color: #06b6d4; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700;">Active Topic</span>
+                            <button onclick="openEditTopicModal()" class="btn-secondary" style="padding: 2px 8px; font-size: 0.7rem; border-radius: 6px;" title="Change Question & Room PIN">
+                                ✏️ Edit Topic & PIN
+                            </button>
+                        </div>
+                        <h1 id="activeTopicHeading" style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin: 6px 0 0 0; line-height: 1.3;">
+                            Live Word Cloud
+                        </h1>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button id="btn-simulate-word" class="btn-secondary" style="padding: 10px 16px; font-size: 0.85rem;" title="Inject random test word">
+                            <span>+ Simulate Word</span>
+                        </button>
+                        <button id="clearPollBtn" class="btn-secondary" style="padding: 10px 16px; font-size: 0.85rem; color: #ef4444; border-color: rgba(239,68,68,0.3);" title="Reset session">
+                            <span>Clear Poll</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Word Cloud Wrapper Container -->
+                <div id="cloud" class="cloud-wrapper" style="flex-grow: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px; width: 100%; height: 100%; min-height: 420px; padding: 24px;">
+                    <div id="dashboard-cloud" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px; width: 100%; height: 100%;">
+                        <!-- Populated dynamically by presenter.js -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Area: Analytics Sidebar & Leaderboard -->
+            <aside style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Real-Time Metrics Panel -->
+                <div class="glass-panel" style="padding: 22px;">
+                    <h3 style="font-size: 0.9rem; font-weight: 700; color: #ffffff; margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 0.06em;">
+                        Session Analytics
+                    </h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 14px; text-align: center;">
+                            <div id="metric-total-words" style="font-size: 1.8rem; font-weight: 800; color: #c084fc; font-family: var(--font-mono);">0</div>
+                            <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 4px;">Total Votes</div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 14px; text-align: center;">
+                            <div id="metric-participants" style="font-size: 1.8rem; font-weight: 800; color: #38bdf8; font-family: var(--font-mono);">0</div>
+                            <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 4px;">Est. Viewers</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Words Leaderboard -->
+                <div class="glass-panel" style="padding: 22px; flex-grow: 1; display: flex; flex-direction: column;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+                        <h3 style="font-size: 0.9rem; font-weight: 700; color: #ffffff; margin: 0; text-transform: uppercase; letter-spacing: 0.06em;">
+                            Top Submissions
+                        </h3>
+                        <span style="font-size: 0.75rem; font-family: var(--font-mono); color: #34d399;">LIVE UPDATE</span>
+                    </div>
+                    <div id="top-words-leaderboard" style="flex-grow: 1; overflow-y: auto; max-height: 480px; padding-right: 4px;">
+                        <!-- Populated dynamically by presenter.js -->
+                    </div>
+                </div>
+
+                <!-- Presenter QR/Invite Card -->
+                <div id="presenter-qr-card" class="glass-panel" style="padding: 18px; text-align: center; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);">
+                    <span style="font-size: 0.85rem; font-weight: 700; color: #ffffff; display: block; margin-bottom: 10px;">Scan or Join by PIN</span>
+                    <div id="qrcode" style="background: #ffffff; padding: 10px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); min-width: 110px; min-height: 110px;">
+                        <!-- Dynamic QR code injected by presenter.js on page load -->
+                    </div>
+                    
+                    <div style="margin-bottom: 12px;">
+                        <span style="font-size: 0.7rem; color: #a1a1aa; text-transform: uppercase; font-weight: bold; letter-spacing: 0.05em; display: block; margin-bottom: 4px; text-align: left;">Direct Share Link</span>
+                        <div style="display: flex; gap: 4px;">
+                            <input type="text" id="shareable-link-input" readonly value="Generating..." style="flex-grow: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 0.75rem; padding: 6px 8px; border-radius: 6px; outline: none; font-family: var(--font-mono);">
+                            <button id="copy-link-btn" title="Copy to clipboard" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 6px; padding: 0 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 0.75rem; color: var(--color-text-muted); line-height: 1.4;">
+                        Or ask them to go to <strong style="color: #38bdf8;">Your App</strong> and use PIN <strong class="session-pin-display" style="color: #ffffff; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">...</strong>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Edit Topic & PIN Modal -->
+    <div id="editTopicModal" class="modal-overlay hidden" style="position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 16px;">
+        <div class="glass-panel" style="width: 100%; max-width: 440px; padding: 24px; position: relative;">
+            <h3 style="color: #ffffff; font-size: 1.2rem; font-weight: 700; margin: 0 0 16px 0;">✏️ Edit Room Topic & PIN</h3>
+            <form id="editTopicForm" style="display: flex; flex-direction: column; gap: 14px;">
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 6px;">Room PIN</label>
+                    <input type="text" id="editPinInput" class="input-glass" maxlength="10" placeholder="e.g. 5591" style="width: 100%; padding: 10px 14px; font-family: var(--font-mono); font-weight: 700;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 6px;">Active Topic / Question</label>
+                    <input type="text" id="editTopicInput" class="input-glass" maxlength="100" placeholder="What topic should participants vote on?" style="width: 100%; padding: 10px 14px;">
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px;">
+                    <button type="button" onclick="closeEditTopicModal()" class="btn-secondary" style="padding: 10px 18px;">Cancel</button>
+                    <button type="submit" class="btn-cyan" style="padding: 10px 18px;">Update & Reload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: 20px; font-size: 0.8rem; color: var(--color-text-muted); position: relative; z-index: 10;">
+        Micro-Menti Presenter Dashboard &bull; Vanilla HTML/CSS/JS Architecture
+    </footer>
+
+    <!-- Socket.io CDN -->
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="config.js"></script>
+    <!-- QRCode Generator CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Runtime Scripts -->
+    <script src="presenter.js" defer></script>
+    <script>
+        function openEditTopicModal() {
+            const modal = document.getElementById('editTopicModal');
+            const pinInput = document.getElementById('editPinInput');
+            const topicInput = document.getElementById('editTopicInput');
+            const params = new URLSearchParams(window.location.search);
+            if (pinInput) pinInput.value = (params.get('pin') || params.get('room') || '5591').trim().toUpperCase();
+            if (topicInput) topicInput.value = params.get('topic') || params.get('q') || 'What comes to mind when you hear "Real-Time Engagement"?';
+            if (modal) modal.classList.remove('hidden');
+        }
+        function closeEditTopicModal() {
+            const modal = document.getElementById('editTopicModal');
+            if (modal) modal.classList.add('hidden');
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('editTopicForm');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const pin = document.getElementById('editPinInput').value.trim().toUpperCase() || '5591';
+                    const topic = document.getElementById('editTopicInput').value.trim() || 'What comes to mind when you hear "Real-Time Engagement"?';
+                    window.location.href = `present.html?pin=${pin}&topic=${encodeURIComponent(topic)}`;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
