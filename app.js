@@ -526,8 +526,7 @@ async function handleJoinSubmit(event) {
     showToast(`Checking Room ${code}...`, "info");
     
     try {
-        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        const BACKEND_URL = window.MICRO_MENTI_BACKEND_URL || (isLocal ? 'http://localhost:3000' : 'https://micro-menti-backend.onrender.com');
+        const BACKEND_URL = 'https://micro-menti-backend.onrender.com';
         const response = await fetch(`${BACKEND_URL}/api/room/${code}`);
         const data = await response.json();
         
