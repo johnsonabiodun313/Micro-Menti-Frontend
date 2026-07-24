@@ -13,9 +13,7 @@
         return;
     }
 
-    // Smart Backend URL determination: use localhost:3000 if running locally, otherwise Render cloud
-    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
-    const BACKEND_URL = window.MICRO_MENTI_BACKEND_URL || (isLocal ? 'http://localhost:3000' : 'https://micro-menti-backend.onrender.com');
+    const BACKEND_URL = 'https://micro-menti-backend.onrender.com';
     
     let socket = null;
 

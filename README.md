@@ -88,12 +88,12 @@ At its core, Micro-Menti Frontend is a client-side web application designed to b
 
 ```mermaid
 flowchart LR
-    USER["Audience / Presenter"]
+    User["Audience / Presenter"]
     WebClient["Micro-Menti Web App (HTML/CSS/JS)"]
     Backend["Simulated Real-time Service"]
 
     User -- Access UI --> WebClient
-    WebClient <--> Backend: Real-time Data (WebSockets)
+    WebClient <-->|Real-time Data (WebSockets)| Backend
 
     style User fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
     style WebClient fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#fff
@@ -106,7 +106,7 @@ Creating a new poll is a quick, guided process for the presenter. They input the
 
 ```mermaid
 sequenceDiagram
-    ACTOR Presenter
+    actor Presenter
     participant WebApp as "Micro-Menti Web App"
     participant SimulatedBackend as "Simulated Backend"
 
@@ -123,7 +123,7 @@ Joining a session is designed to be as simple as possible. Participants use a se
 
 ```mermaid
 sequenceDiagram
-    ACTOR Participant
+    actor Participant
     participant WebApp as "Micro-Menti Web App"
     participant SimulatedBackend as "Simulated Backend"
 
@@ -140,7 +140,7 @@ The core of Micro-Menti is its ability to visualize contributions in real time. 
 
 ```mermaid
 sequenceDiagram
-    ACTOR Participant
+    actor Participant
     participant WebApp as "Micro-Menti Web App"
     participant SimulatedBackend as "Simulated Backend"
     participant PresenterScreen as "Presenter Screen"
